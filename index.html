@@ -821,6 +821,480 @@ body::before {
 /* ── Transitions ── */
 .fade-enter { opacity: 0; transform: translateY(4px); }
 .fade-enter-active { opacity: 1; transform: translateY(0); transition: all 0.3s ease; }
+
+/* ══════════════════════════════════════
+   TEMPLATES VIEW
+   ══════════════════════════════════════ */
+
+.templates-view {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 20px 120px;
+}
+
+.templates-view.visible { display: flex; }
+
+/* ── Template category pills ── */
+.tpl-cats {
+  display: flex;
+  gap: 6px;
+  padding: 12px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+.tpl-cats::-webkit-scrollbar { display: none; }
+
+.tpl-cat-pill {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.tpl-cat-pill:hover { border-color: var(--accent); color: var(--accent); }
+.tpl-cat-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+.tpl-cat-pill .pill-count {
+  display: inline-block;
+  margin-left: 4px;
+  opacity: 0.65;
+  font-size: 0.7rem;
+}
+
+/* ── Add template button ── */
+.tpl-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  border: 2px dashed rgba(26,92,92,0.2);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.tpl-add-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* ── Template card ── */
+.tpl-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 10px;
+  animation: cardIn 0.3s ease both;
+  transition: all 0.2s;
+}
+
+.tpl-card:hover {
+  border-color: rgba(26,92,92,0.15);
+  box-shadow: var(--shadow-md);
+}
+
+.tpl-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tpl-card-title {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.tpl-card-spoken {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.tpl-card-spoken svg { flex-shrink: 0; }
+
+.tpl-card-cat {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--bg-warm);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-left: 8px;
+}
+
+.tpl-card-body {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  max-height: 80px;
+  overflow: hidden;
+  position: relative;
+  white-space: pre-wrap;
+}
+
+.tpl-card-body.expanded {
+  max-height: none;
+}
+
+.tpl-card-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: linear-gradient(transparent, var(--bg-card));
+  pointer-events: none;
+}
+
+.tpl-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tpl-action {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tpl-action.copy {
+  background: var(--accent);
+  color: white;
+}
+.tpl-action.copy:hover { background: var(--accent-glow); }
+.tpl-action.copy.copied {
+  background: #2a8a4a;
+}
+
+.tpl-action.setup {
+  background: var(--amber-light);
+  color: var(--amber);
+}
+.tpl-action.setup:hover { background: var(--amber-glow); }
+
+.tpl-action.edit {
+  background: var(--bg-warm);
+  color: var(--text-secondary);
+}
+.tpl-action.edit:hover { background: var(--border); }
+
+.tpl-action.delete {
+  background: transparent;
+  color: var(--text-muted);
+}
+.tpl-action.delete:hover { background: var(--red-light); color: var(--red-soft); }
+
+/* ── Template editor overlay ── */
+.tpl-editor-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.tpl-editor-overlay.visible { display: flex; }
+
+.tpl-editor {
+  background: var(--bg-card);
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding: 24px 20px calc(20px + var(--safe-bottom));
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
+  box-shadow: var(--shadow-lg);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.tpl-editor-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tpl-editor-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--bg-warm);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tpl-field {
+  margin-bottom: 16px;
+}
+
+.tpl-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tpl-label-hint {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.tpl-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.tpl-input:focus { border-color: var(--accent); }
+
+.tpl-textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  min-height: 150px;
+  line-height: 1.55;
+  transition: border-color 0.2s;
+}
+
+.tpl-textarea:focus { border-color: var(--accent); }
+
+.tpl-textarea::placeholder { color: var(--text-muted); }
+
+.tpl-cat-select {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tpl-cat-option {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tpl-cat-option:hover { border-color: var(--accent); color: var(--accent); }
+.tpl-cat-option.selected { background: var(--accent); color: white; border-color: var(--accent); }
+
+.tpl-custom-cat {
+  display: none;
+  margin-top: 8px;
+}
+.tpl-custom-cat.visible { display: block; }
+
+.tpl-save-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 12px rgba(26,92,92,0.25);
+  margin-top: 8px;
+}
+
+.tpl-save-btn:hover { background: var(--accent-glow); }
+
+/* ── Dragon setup instructions ── */
+.dragon-setup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.dragon-setup-overlay.visible { display: flex; }
+
+.dragon-setup {
+  background: var(--bg-card);
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding: 24px 20px calc(20px + var(--safe-bottom));
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
+  box-shadow: var(--shadow-lg);
+}
+
+.setup-step {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.setup-step:last-child { border-bottom: none; }
+
+.setup-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.setup-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.setup-text strong { color: var(--text); }
+
+.setup-copyable {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--bg-warm);
+  border: 1px solid var(--border);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  margin: 4px 0;
+  transition: all 0.15s;
+  word-break: break-all;
+}
+
+.setup-copyable:hover { background: var(--accent-light); border-color: rgba(26,92,92,0.2); }
+.setup-copyable.copied { background: #e8f8ee; border-color: #2a8a4a; color: #2a8a4a; }
+
+/* ── Template search ── */
+.tpl-search-wrap {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.tpl-search {
+  width: 100%;
+  padding: 10px 14px 10px 36px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.tpl-search:focus { border-color: var(--accent); }
+
+.tpl-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
@@ -883,6 +1357,12 @@ body::before {
       </span>
       <span class="nav-label">Browse</span>
     </button>
+    <button class="nav-item" data-view="templates" onclick="setView('templates')">
+      <span class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+      </span>
+      <span class="nav-label">Templates</span>
+    </button>
     <button class="nav-item" data-view="favourites" onclick="setView('favourites')">
       <span class="nav-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -896,6 +1376,78 @@ body::before {
       <span class="nav-label">Quiz</span>
     </button>
   </nav>
+</div>
+
+<!-- Templates view (inside app, hidden by default) -->
+<div class="templates-view" id="templatesView">
+  <div style="padding:20px 0 4px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--text);">My Templates</div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">Draft auto-texts here, then add them to Dragon</div>
+    </div>
+  </div>
+  <div class="tpl-search-wrap">
+    <span class="tpl-search-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </span>
+    <input class="tpl-search" id="tplSearch" type="text" placeholder="Search your templates..." oninput="renderTemplates()">
+  </div>
+  <div class="tpl-cats" id="tplCats"></div>
+  <button class="tpl-add-btn" onclick="openEditor()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+    New Template
+  </button>
+  <div id="tplList"></div>
+</div>
+
+<!-- Template editor overlay -->
+<div class="tpl-editor-overlay" id="tplEditorOverlay">
+  <div class="tpl-editor">
+    <div class="tpl-editor-title">
+      <span id="editorTitle">New Template</span>
+      <button class="tpl-editor-close" onclick="closeEditor()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="tpl-field">
+      <label class="tpl-label">Template Name</label>
+      <input class="tpl-input" id="editorName" type="text" placeholder="e.g. Follow-up appointment">
+    </div>
+
+    <div class="tpl-field">
+      <label class="tpl-label">Spoken Form <span class="tpl-label-hint">— what you'll say in Dragon to trigger this</span></label>
+      <input class="tpl-input" id="editorSpoken" type="text" placeholder="e.g. follow up letter">
+    </div>
+
+    <div class="tpl-field">
+      <label class="tpl-label">Category</label>
+      <div class="tpl-cat-select" id="editorCats"></div>
+      <div class="tpl-custom-cat" id="customCatWrap">
+        <input class="tpl-input" id="editorCustomCat" type="text" placeholder="Type new category name..." style="margin-top:8px;">
+      </div>
+    </div>
+
+    <div class="tpl-field">
+      <label class="tpl-label">Template Text <span class="tpl-label-hint">— use [brackets] for fill-in fields, e.g. [patient name]</span></label>
+      <textarea class="tpl-textarea" id="editorText" placeholder="Type your template text here...&#10;&#10;Example:&#10;Dear [patient name],&#10;&#10;Thank you for attending your appointment on [date]. Following our consultation, I would like to recommend..."></textarea>
+    </div>
+
+    <button class="tpl-save-btn" id="editorSaveBtn" onclick="saveTemplate()">Save Template</button>
+  </div>
+</div>
+
+<!-- Dragon setup instructions overlay -->
+<div class="dragon-setup-overlay" id="dragonSetupOverlay">
+  <div class="dragon-setup">
+    <div class="tpl-editor-title">
+      <span>Add to Dragon</span>
+      <button class="tpl-editor-close" onclick="closeDragonSetup()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="dragonSetupContent"></div>
+  </div>
 </div>
 
 <!-- Quiz overlay -->
@@ -1215,6 +1767,33 @@ function setView(view) {
   document.querySelectorAll('.nav-item').forEach(n => {
     n.classList.toggle('active', n.dataset.view === view);
   });
+
+  // Toggle visibility of browse vs templates sections
+  const header = document.querySelector('.header');
+  const sourceToggle = document.querySelector('.source-toggle');
+  const tabs = document.getElementById('tabs');
+  const resultsInfo = document.getElementById('resultsInfo');
+  const commandList = document.getElementById('commandList');
+  const templatesView = document.getElementById('templatesView');
+
+  if (view === 'templates') {
+    header.style.display = 'none';
+    sourceToggle.style.display = 'none';
+    tabs.style.display = 'none';
+    resultsInfo.style.display = 'none';
+    commandList.style.display = 'none';
+    templatesView.classList.add('visible');
+    renderTemplates();
+    return;
+  } else {
+    header.style.display = '';
+    sourceToggle.style.display = '';
+    tabs.style.display = '';
+    resultsInfo.style.display = '';
+    commandList.style.display = '';
+    templatesView.classList.remove('visible');
+  }
+
   if (view === 'quiz') {
     startQuiz();
     return;
@@ -1359,6 +1938,389 @@ function shuffleArray(arr) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
+}
+
+// ══════════════════════════════════════
+// TEMPLATES (Auto-Text Workshop)
+// ══════════════════════════════════════
+
+const DEFAULT_CATEGORIES = ['Emails', 'Clinical Notes', 'Referral Letters', 'Patient Advice', 'Admin'];
+let templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
+let editingTemplateId = null;
+let tplCategoryFilter = 'all';
+
+function getTemplateCategories() {
+  const cats = new Set(DEFAULT_CATEGORIES);
+  templates.forEach(t => { if (t.category) cats.add(t.category); });
+  return [...cats];
+}
+
+function getUsedCategories() {
+  const cats = new Map();
+  templates.forEach(t => {
+    const c = t.category || 'Uncategorised';
+    cats.set(c, (cats.get(c) || 0) + 1);
+  });
+  return cats;
+}
+
+function saveTemplatesStorage() {
+  localStorage.setItem('dragon_templates', JSON.stringify(templates));
+}
+
+function renderTemplates() {
+  const search = (document.getElementById('tplSearch')?.value || '').toLowerCase().trim();
+  const catsContainer = document.getElementById('tplCats');
+  const listContainer = document.getElementById('tplList');
+
+  // Render category pills
+  const usedCats = getUsedCategories();
+  let catHtml = `<button class="tpl-cat-pill ${tplCategoryFilter === 'all' ? 'active' : ''}" onclick="setTplCategory('all')">All<span class="pill-count">${templates.length}</span></button>`;
+  for (const [cat, count] of usedCats) {
+    catHtml += `<button class="tpl-cat-pill ${tplCategoryFilter === cat ? 'active' : ''}" onclick="setTplCategory('${escHtml(cat)}')">${escHtml(cat)}<span class="pill-count">${count}</span></button>`;
+  }
+  catsContainer.innerHTML = catHtml;
+
+  // Filter templates
+  let filtered = templates;
+  if (tplCategoryFilter !== 'all') {
+    filtered = filtered.filter(t => (t.category || 'Uncategorised') === tplCategoryFilter);
+  }
+  if (search) {
+    const words = search.split(/\s+/);
+    filtered = filtered.filter(t => {
+      const hay = [t.name, t.spoken, t.text, t.category].join(' ').toLowerCase();
+      return words.every(w => hay.includes(w));
+    });
+  }
+
+  if (filtered.length === 0 && templates.length === 0) {
+    listContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">&#128221;</div>
+        <div class="empty-title">No templates yet</div>
+        <div class="empty-desc">Create your first auto-text template — write it here, then add it to Dragon with one tap</div>
+      </div>`;
+    return;
+  }
+
+  if (filtered.length === 0) {
+    listContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">&#128269;</div>
+        <div class="empty-title">No matching templates</div>
+        <div class="empty-desc">Try different search terms or category</div>
+      </div>`;
+    return;
+  }
+
+  let html = '';
+  filtered.forEach((tpl, i) => {
+    const preview = tpl.text.length > 200 ? tpl.text.substring(0, 200) + '...' : tpl.text;
+    const needsExpand = tpl.text.length > 120;
+
+    html += `
+      <div class="tpl-card" style="animation-delay:${Math.min(i * 0.04, 0.3)}s">
+        <div class="tpl-card-header">
+          <div>
+            <div class="tpl-card-title">${escHtml(tpl.name)}</div>
+            <div class="tpl-card-spoken">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+              "${escHtml(tpl.spoken)}"
+            </div>
+          </div>
+          <span class="tpl-card-cat">${escHtml(tpl.category || 'Uncategorised')}</span>
+        </div>
+        <div class="tpl-card-body" id="tplBody_${tpl.id}" onclick="toggleTplExpand('${tpl.id}')">${escHtml(tpl.text)}${needsExpand ? '<div class="tpl-card-fade"></div>' : ''}</div>
+        <div class="tpl-card-actions">
+          <button class="tpl-action copy" id="copyBtn_${tpl.id}" onclick="copyTemplate('${tpl.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy Text
+          </button>
+          <button class="tpl-action setup" onclick="showDragonSetup('${tpl.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+            Add to Dragon
+          </button>
+          <button class="tpl-action edit" onclick="openEditor('${tpl.id}')">Edit</button>
+          <button class="tpl-action delete" onclick="deleteTemplate('${tpl.id}')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+          </button>
+        </div>
+      </div>`;
+  });
+
+  listContainer.innerHTML = html;
+}
+
+function setTplCategory(cat) {
+  tplCategoryFilter = cat;
+  renderTemplates();
+}
+
+function toggleTplExpand(id) {
+  const el = document.getElementById('tplBody_' + id);
+  if (el) el.classList.toggle('expanded');
+}
+
+function copyTemplate(id) {
+  const tpl = templates.find(t => t.id === id);
+  if (!tpl) return;
+  navigator.clipboard.writeText(tpl.text).then(() => {
+    const btn = document.getElementById('copyBtn_' + id);
+    if (btn) {
+      btn.classList.add('copied');
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copy Text`;
+      }, 2000);
+    }
+  });
+}
+
+// ── Editor ──
+
+function openEditor(existingId) {
+  editingTemplateId = existingId || null;
+  const overlay = document.getElementById('tplEditorOverlay');
+  const title = document.getElementById('editorTitle');
+  const nameInput = document.getElementById('editorName');
+  const spokenInput = document.getElementById('editorSpoken');
+  const textArea = document.getElementById('editorText');
+  const saveBtn = document.getElementById('editorSaveBtn');
+
+  if (existingId) {
+    const tpl = templates.find(t => t.id === existingId);
+    if (!tpl) return;
+    title.textContent = 'Edit Template';
+    nameInput.value = tpl.name;
+    spokenInput.value = tpl.spoken;
+    textArea.value = tpl.text;
+    saveBtn.textContent = 'Save Changes';
+    renderEditorCats(tpl.category);
+  } else {
+    title.textContent = 'New Template';
+    nameInput.value = '';
+    spokenInput.value = '';
+    textArea.value = '';
+    saveBtn.textContent = 'Save Template';
+    renderEditorCats(null);
+  }
+
+  overlay.classList.add('visible');
+  setTimeout(() => nameInput.focus(), 300);
+
+  // Auto-generate spoken form from name
+  nameInput.oninput = () => {
+    if (!editingTemplateId && !spokenInput.dataset.manual) {
+      spokenInput.value = nameInput.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+    }
+  };
+  spokenInput.oninput = () => { spokenInput.dataset.manual = '1'; };
+}
+
+function closeEditor() {
+  document.getElementById('tplEditorOverlay').classList.remove('visible');
+  editingTemplateId = null;
+  const spokenInput = document.getElementById('editorSpoken');
+  delete spokenInput.dataset.manual;
+}
+
+function renderEditorCats(selectedCat) {
+  const cats = getTemplateCategories();
+  const container = document.getElementById('editorCats');
+  const customWrap = document.getElementById('customCatWrap');
+
+  let isCustom = selectedCat && !cats.includes(selectedCat);
+  let html = '';
+
+  cats.forEach(cat => {
+    const active = (cat === selectedCat) ? 'selected' : '';
+    html += `<button type="button" class="tpl-cat-option ${active}" onclick="selectEditorCat(this, '${escHtml(cat)}')">${escHtml(cat)}</button>`;
+  });
+  html += `<button type="button" class="tpl-cat-option ${isCustom ? 'selected' : ''}" onclick="selectEditorCat(this, '__custom__')">+ Custom</button>`;
+
+  container.innerHTML = html;
+
+  if (isCustom) {
+    customWrap.classList.add('visible');
+    document.getElementById('editorCustomCat').value = selectedCat;
+  } else {
+    customWrap.classList.remove('visible');
+  }
+}
+
+let selectedEditorCat = null;
+
+function selectEditorCat(btn, cat) {
+  document.querySelectorAll('.tpl-cat-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  const customWrap = document.getElementById('customCatWrap');
+  if (cat === '__custom__') {
+    customWrap.classList.add('visible');
+    selectedEditorCat = '__custom__';
+    setTimeout(() => document.getElementById('editorCustomCat').focus(), 100);
+  } else {
+    customWrap.classList.remove('visible');
+    selectedEditorCat = cat;
+  }
+}
+
+function saveTemplate() {
+  const name = document.getElementById('editorName').value.trim();
+  const spoken = document.getElementById('editorSpoken').value.trim();
+  const text = document.getElementById('editorText').value.trim();
+  let category = selectedEditorCat;
+
+  if (category === '__custom__') {
+    category = document.getElementById('editorCustomCat').value.trim();
+  }
+
+  // Find selected category from buttons if not set via click
+  if (!category) {
+    const sel = document.querySelector('.tpl-cat-option.selected');
+    if (sel) {
+      const catText = sel.textContent.trim();
+      if (catText === '+ Custom') {
+        category = document.getElementById('editorCustomCat').value.trim();
+      } else {
+        category = catText;
+      }
+    }
+  }
+
+  if (!name) { document.getElementById('editorName').focus(); return; }
+  if (!spoken) { document.getElementById('editorSpoken').focus(); return; }
+  if (!text) { document.getElementById('editorText').focus(); return; }
+  if (!category) category = 'Uncategorised';
+
+  if (editingTemplateId) {
+    const idx = templates.findIndex(t => t.id === editingTemplateId);
+    if (idx >= 0) {
+      templates[idx] = { ...templates[idx], name, spoken, text, category, updated: Date.now() };
+    }
+  } else {
+    templates.push({
+      id: 'tpl_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      name,
+      spoken,
+      text,
+      category,
+      created: Date.now(),
+      updated: Date.now()
+    });
+  }
+
+  saveTemplatesStorage();
+  closeEditor();
+  selectedEditorCat = null;
+  renderTemplates();
+}
+
+function deleteTemplate(id) {
+  const tpl = templates.find(t => t.id === id);
+  if (!tpl) return;
+  if (!confirm(`Delete "${tpl.name}"? This cannot be undone.`)) return;
+  templates = templates.filter(t => t.id !== id);
+  saveTemplatesStorage();
+  renderTemplates();
+}
+
+// ── Dragon Setup Instructions ──
+
+function showDragonSetup(id) {
+  const tpl = templates.find(t => t.id === id);
+  if (!tpl) return;
+
+  const container = document.getElementById('dragonSetupContent');
+  const spokenCopyId = 'setupSpoken_' + id;
+  const textCopyId = 'setupText_' + id;
+
+  container.innerHTML = `
+    <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.5;">
+      Follow these steps to add <strong>"${escHtml(tpl.name)}"</strong> as an auto-text in Dragon Medical One.
+      You'll only need to do this once — after that, just say the trigger phrase.
+    </p>
+
+    <div class="setup-step">
+      <div class="setup-num">1</div>
+      <div class="setup-text">
+        In Dragon, say <strong>"Manage Auto-texts"</strong><br>
+        <span style="color:var(--text-muted);font-size:0.78rem;">Or click the DragonBar menu → Manage Auto-texts</span>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">2</div>
+      <div class="setup-text">
+        Click the <strong>+ (plus)</strong> icon to create a new auto-text
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">3</div>
+      <div class="setup-text">
+        In the <strong>Name</strong> field, type:<br>
+        <span class="setup-copyable" id="${spokenCopyId}" onclick="copySetupField('${spokenCopyId}', '${escHtml(tpl.name)}')">${escHtml(tpl.name)}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">4</div>
+      <div class="setup-text">
+        Check the <strong>Spoken form</strong> reads:<br>
+        <span class="setup-copyable" id="${spokenCopyId}2" onclick="copySetupField('${spokenCopyId}2', '${escAttr(tpl.spoken)}')">${escHtml(tpl.spoken)}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </span>
+        <br><span style="color:var(--text-muted);font-size:0.78rem;">This is what you'll say to trigger it</span>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">5</div>
+      <div class="setup-text">
+        In the <strong>content area</strong>, paste your template text:<br>
+        <span class="setup-copyable" id="${textCopyId}" onclick="copySetupField('${textCopyId}', ${JSON.stringify(tpl.text)})" style="display:block;white-space:pre-wrap;max-height:100px;overflow-y:auto;margin-top:6px;">${escHtml(tpl.text.length > 150 ? tpl.text.substring(0, 150) + '...' : tpl.text)}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </span>
+        <span style="color:var(--text-muted);font-size:0.78rem;">Tap to copy, then paste into Dragon</span>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">6</div>
+      <div class="setup-text">
+        Click <strong>"Apply All"</strong> then <strong>"Close"</strong>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;padding:14px;border-radius:10px;background:var(--accent-light);font-size:0.82rem;color:var(--accent);line-height:1.5;">
+      <strong>Done!</strong> Now you can say <strong>"${escHtml(tpl.spoken)}"</strong> anywhere — in an email, EMIS notes, a Word document — and Dragon will type out the full template.
+    </div>
+  `;
+
+  document.getElementById('dragonSetupOverlay').classList.add('visible');
+}
+
+function closeDragonSetup() {
+  document.getElementById('dragonSetupOverlay').classList.remove('visible');
+}
+
+function copySetupField(elId, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const el = document.getElementById(elId);
+    if (el) {
+      el.classList.add('copied');
+      setTimeout(() => el.classList.remove('copied'), 1500);
+    }
+  });
+}
+
+function escAttr(s) {
+  return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
 
 // ══════════════════════════════════════
