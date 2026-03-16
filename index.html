@@ -2491,9 +2491,12 @@ function showApp() {
 
 function skipLogin() {
   isOfflineMode = true;
-  templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
+  // Templates already loaded from localStorage in init
   showApp();
+  loadUserCommandsFromTemplates();
   render();
+  initVoice();
+  updateVoiceBtnPosition();
   renderTemplates();
 }
 
@@ -3082,30 +3085,34 @@ document.getElementById('searchInput').addEventListener('input', function() {
 // ══════════════════════════════════════
 
 (async function init() {
+  // Always load localStorage cache first — ensures data is available immediately
+  templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
+
   // Check if user is authenticated
   const authed = await checkAuth();
 
   if (authed) {
-    // Logged in — load from API, fall back to localStorage
+    // Logged in — show app, then sync from API (updates in background)
     showApp();
     const loaded = await loadTemplatesFromApi();
-    if (!loaded) {
-      templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
-    }
+    // If API failed, we already have localStorage data from above
   } else {
-    // Check if we're on Azure SWA (/.auth/me exists) or local/GitHub Pages
+    // Check if we're on Azure SWA or local/GitHub Pages
+    let onSwa = false;
     try {
       const res = await fetch('/.auth/me');
-      if (res.ok) {
-        // On SWA but not logged in — show login screen
-        return; // Stay on login screen
-      }
-    } catch (e) {
-      // Not on SWA — skip login, use localStorage
+      if (res.ok) onSwa = true;
+    } catch (e) {}
+
+    if (onSwa) {
+      // On SWA but not logged in — show login screen
+      // But if we have cached templates, pre-load them so skipLogin works instantly
+      loadUserCommandsFromTemplates();
+      return; // Stay on login screen, user can sign in or skip
     }
+
     // Local dev / GitHub Pages — go straight to app
     isOfflineMode = true;
-    templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
     showApp();
   }
 
