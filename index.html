@@ -822,6 +822,8 @@ body::before {
 .fade-enter { opacity: 0; transform: translateY(4px); }
 .fade-enter-active { opacity: 1; transform: translateY(0); transition: all 0.3s ease; }
 
+.hidden { display: none !important; }
+
 /* ══════════════════════════════════════
    TEMPLATES VIEW
    ══════════════════════════════════════ */
@@ -1536,11 +1538,157 @@ body::before {
 }
 
 .tpl-empty-btn:hover { background: var(--accent-glow); }
+
+/* ══════════════════════════════════════
+   LOGIN SCREEN
+   ══════════════════════════════════════ */
+
+.login-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-screen.hidden { display: none; }
+
+.login-card {
+  text-align: center;
+  max-width: 340px;
+  width: 100%;
+}
+
+.login-logo {
+  width: 64px;
+  height: 64px;
+  background: var(--accent);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 16px rgba(26,92,92,0.3);
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.login-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+}
+
+.login-btn:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.login-btn svg { flex-shrink: 0; }
+
+.login-skip {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+}
+
+.login-skip:hover { color: var(--accent); }
+
+/* ── User badge in header ── */
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-family: var(--font-body);
+}
+
+.user-badge:hover { background: var(--accent); color: white; }
+
+.user-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
 </style>
 </head>
 <body>
 
-<div class="app" id="app">
+<!-- Login screen -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+    </div>
+    <div class="login-title">Dragon Companion</div>
+    <div class="login-sub">Sign in to sync your templates across all your devices</div>
+    <a class="login-btn" href="/.auth/login/aad?post_login_redirect_uri=/">
+      <svg width="20" height="20" viewBox="0 0 23 23"><path fill="#f25022" d="M0 0h11v11H0z"/><path fill="#00a4ef" d="M0 12h11v11H0z"/><path fill="#7fba00" d="M12 0h11v11H12z"/><path fill="#ffb900" d="M12 12h11v11H12z"/></svg>
+      Sign in with Microsoft
+    </a>
+    <a class="login-btn" href="/.auth/login/google?post_login_redirect_uri=/">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 24.3c0-1.6-.1-3.1-.4-4.6H24v9.2h11.5c-.5 2.6-2 4.8-4.2 6.3v5.2h6.8c4-3.7 6.4-9.1 6.4-16.1z"/><path fill="#34A853" d="M24 48c5.7 0 10.5-1.9 14-5.2l-6.8-5.2c-1.9 1.3-4.3 2-7.2 2-5.5 0-10.2-3.7-11.9-8.7H5v5.4C8.4 43.3 15.6 48 24 48z"/><path fill="#FBBC05" d="M12.1 31c-.9-2.6-.9-5.4 0-8l-7.1-5.4C1.8 23 0 28 0 33.5c0 5.5 1.8 10.5 5 14.5l7.1-5.4z"/><path fill="#EA4335" d="M24 9.5c3.1 0 5.9 1.1 8.1 3.2l6-6C34.5 3.2 29.7 1 24 1 15.6 1 8.4 5.7 5 12.6l7.1 5.4C13.8 13.2 18.5 9.5 24 9.5z"/></svg>
+      Sign in with Google
+    </a>
+    <button class="login-skip" onclick="skipLogin()">Continue without account</button>
+  </div>
+</div>
+
+<div class="app hidden" id="app">
   <!-- Header -->
   <header class="header">
     <div class="header-top">
@@ -1554,6 +1702,10 @@ body::before {
         </div>
       </div>
       <div class="header-actions">
+        <button class="user-badge" id="userBadge" onclick="showUserMenu()" style="display:none">
+          <span class="user-avatar" id="userAvatar">?</span>
+          <span id="userName"></span>
+        </button>
         <button class="icon-btn" id="quizBtn" title="Practice quiz" onclick="startQuiz()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 10h6"/><path d="M9 14h4"/></svg>
         </button>
@@ -2223,12 +2375,14 @@ const STATUS_CONFIG = {
   'in-dragon': { label: 'In Dragon',  icon: '&#127908;', dotClass: 'in-dragon' }
 };
 
-let templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
+let templates = [];
 let editingTemplateId = null;
 let tplCategoryFilter = 'all';
 let tplStatusFilter = 'all';
 let selectedEditorCat = null;
 let selectedEditorStatus = 'draft';
+let currentUser = null;
+let isOfflineMode = false;
 
 function getTemplateCategories() {
   const cats = new Set(DEFAULT_CATEGORIES);
@@ -2246,7 +2400,106 @@ function getUsedCategories(filtered) {
 }
 
 function saveTemplatesStorage() {
+  // Always save to localStorage as local cache
   localStorage.setItem('dragon_templates', JSON.stringify(templates));
+}
+
+// ── API helpers ──
+
+async function apiCall(method, body) {
+  try {
+    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch('/api/templates', opts);
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('API call failed, using local storage:', err.message);
+    return null;
+  }
+}
+
+async function loadTemplatesFromApi() {
+  const data = await apiCall('GET');
+  if (data && data.templates) {
+    templates = data.templates.map(t => ({
+      id: t._id || t.id,
+      name: t.name,
+      spoken: t.spoken,
+      text: t.text,
+      category: t.category,
+      status: t.status || 'draft',
+      created: t.created,
+      updated: t.updated
+    }));
+    saveTemplatesStorage(); // cache locally
+    return true;
+  }
+  return false;
+}
+
+async function saveTemplateToApi(tpl) {
+  if (isOfflineMode) return;
+  await apiCall('POST', {
+    id: tpl.id,
+    name: tpl.name,
+    spoken: tpl.spoken,
+    text: tpl.text,
+    category: tpl.category,
+    status: tpl.status
+  });
+}
+
+async function deleteTemplateFromApi(id) {
+  if (isOfflineMode) return;
+  await apiCall('DELETE', { id });
+}
+
+async function checkAuth() {
+  try {
+    const res = await fetch('/.auth/me');
+    const data = await res.json();
+    if (data.clientPrincipal) {
+      currentUser = {
+        id: data.clientPrincipal.userId,
+        name: data.clientPrincipal.userDetails,
+        provider: data.clientPrincipal.identityProvider
+      };
+      return true;
+    }
+  } catch (err) {
+    // Not on Azure SWA (local dev or GitHub Pages) — skip auth
+  }
+  return false;
+}
+
+function showApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+
+  if (currentUser) {
+    const badge = document.getElementById('userBadge');
+    const avatar = document.getElementById('userAvatar');
+    const nameEl = document.getElementById('userName');
+    const initial = (currentUser.name || '?')[0].toUpperCase();
+    avatar.textContent = initial;
+    nameEl.textContent = currentUser.name || currentUser.provider;
+    badge.style.display = '';
+  }
+}
+
+function skipLogin() {
+  isOfflineMode = true;
+  templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
+  showApp();
+  render();
+  renderTemplates();
+}
+
+function showUserMenu() {
+  if (confirm('Sign out?')) {
+    window.location.href = '/.auth/logout?post_logout_redirect_uri=/';
+  }
 }
 
 function updateCharCount() {
@@ -2395,6 +2648,7 @@ function cycleStatus(id) {
   tpl.status = next;
   tpl.updated = Date.now();
   saveTemplatesStorage();
+  saveTemplateToApi(tpl);
   renderTemplates();
 }
 
@@ -2558,6 +2812,9 @@ function saveTemplate() {
   }
 
   saveTemplatesStorage();
+  // Save to API in background
+  const savedTpl = editingTemplateId ? templates.find(t => t.id === editingTemplateId) : templates[templates.length - 1];
+  if (savedTpl) saveTemplateToApi(savedTpl);
   closeEditor();
   renderTemplates();
 }
@@ -2568,6 +2825,7 @@ function deleteTemplate(id) {
   if (!confirm(`Delete "${tpl.name}"?`)) return;
   templates = templates.filter(t => t.id !== id);
   saveTemplatesStorage();
+  deleteTemplateFromApi(id);
   renderTemplates();
 }
 
@@ -2761,9 +3019,38 @@ document.getElementById('searchInput').addEventListener('input', function() {
 // INIT
 // ══════════════════════════════════════
 
-render();
-initVoice();
-updateVoiceBtnPosition();
+(async function init() {
+  // Check if user is authenticated
+  const authed = await checkAuth();
+
+  if (authed) {
+    // Logged in — load from API, fall back to localStorage
+    showApp();
+    const loaded = await loadTemplatesFromApi();
+    if (!loaded) {
+      templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
+    }
+  } else {
+    // Check if we're on Azure SWA (/.auth/me exists) or local/GitHub Pages
+    try {
+      const res = await fetch('/.auth/me');
+      if (res.ok) {
+        // On SWA but not logged in — show login screen
+        return; // Stay on login screen
+      }
+    } catch (e) {
+      // Not on SWA — skip login, use localStorage
+    }
+    // Local dev / GitHub Pages — go straight to app
+    isOfflineMode = true;
+    templates = JSON.parse(localStorage.getItem('dragon_templates') || '[]');
+    showApp();
+  }
+
+  render();
+  initVoice();
+  updateVoiceBtnPosition();
+})();
 
 // Register service worker for offline
 if ('serviceWorker' in navigator) {
