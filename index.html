@@ -831,17 +831,21 @@ body::before {
   flex-direction: column;
   flex: 1;
   padding: 0 20px 120px;
+  margin-top: 0;
 }
 
 .templates-view.visible { display: flex; }
 
 /* ── Templates header ── */
 .tpl-header {
-  padding: 20px 0 8px;
+  padding: 16px 0 8px;
   position: sticky;
   top: 0;
   z-index: 50;
-  background: linear-gradient(to bottom, var(--bg) 85%, transparent);
+  background: var(--bg);
+  margin: 0 -20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .tpl-header-row {
@@ -1586,6 +1590,35 @@ body::before {
   <!-- Command list -->
   <div class="command-list" id="commandList"></div>
 
+  <!-- Templates view -->
+  <div class="templates-view" id="templatesView">
+    <div class="tpl-header">
+      <div class="tpl-header-row">
+        <div>
+          <div class="tpl-header-title">My Templates</div>
+          <div class="tpl-header-sub">Draft auto-texts, then add to Dragon</div>
+        </div>
+        <button class="tpl-add-fab" onclick="openEditor()" title="New template">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+        </button>
+      </div>
+      <div class="tpl-search-wrap">
+        <span class="tpl-search-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </span>
+        <input class="tpl-search" id="tplSearch" type="text" placeholder="Search templates..." oninput="renderTemplates()">
+      </div>
+      <div class="tpl-status-bar" id="tplStatusBar">
+        <button class="tpl-status-pill active" data-status="all" onclick="setTplStatus('all')">All</button>
+        <button class="tpl-status-pill" data-status="draft" onclick="setTplStatus('draft')"><span class="status-dot draft"></span>Draft</button>
+        <button class="tpl-status-pill" data-status="saved" onclick="setTplStatus('saved')"><span class="status-dot saved"></span>Saved</button>
+        <button class="tpl-status-pill" data-status="in-dragon" onclick="setTplStatus('in-dragon')"><span class="status-dot in-dragon"></span>In Dragon</button>
+      </div>
+    </div>
+    <div class="tpl-cats" id="tplCats"></div>
+    <div id="tplList"></div>
+  </div>
+
   <!-- Bottom nav -->
   <nav class="bottom-nav">
     <button class="nav-item active" data-view="browse" onclick="setView('browse')">
@@ -1613,35 +1646,6 @@ body::before {
       <span class="nav-label">Quiz</span>
     </button>
   </nav>
-</div>
-
-<!-- Templates view (inside app, hidden by default) -->
-<div class="templates-view" id="templatesView">
-  <div class="tpl-header">
-    <div class="tpl-header-row">
-      <div>
-        <div class="tpl-header-title">My Templates</div>
-        <div class="tpl-header-sub">Draft auto-texts, then add to Dragon</div>
-      </div>
-      <button class="tpl-add-fab" onclick="openEditor()" title="New template">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
-      </button>
-    </div>
-    <div class="tpl-search-wrap">
-      <span class="tpl-search-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      </span>
-      <input class="tpl-search" id="tplSearch" type="text" placeholder="Search templates..." oninput="renderTemplates()">
-    </div>
-    <div class="tpl-status-bar" id="tplStatusBar">
-      <button class="tpl-status-pill active" data-status="all" onclick="setTplStatus('all')">All</button>
-      <button class="tpl-status-pill" data-status="draft" onclick="setTplStatus('draft')"><span class="status-dot draft"></span>Draft</button>
-      <button class="tpl-status-pill" data-status="saved" onclick="setTplStatus('saved')"><span class="status-dot saved"></span>Saved</button>
-      <button class="tpl-status-pill" data-status="in-dragon" onclick="setTplStatus('in-dragon')"><span class="status-dot in-dragon"></span>In Dragon</button>
-    </div>
-  </div>
-  <div class="tpl-cats" id="tplCats"></div>
-  <div id="tplList"></div>
 </div>
 
 <!-- Template editor overlay -->
