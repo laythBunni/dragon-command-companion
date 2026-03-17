@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1a3a3a">
 <link rel="manifest" href="manifest.json">
@@ -2407,11 +2407,11 @@ function saveTemplatesStorage() {
 
 // ── API helpers ──
 
-async function apiCall(method, body) {
+async function apiFetch(url, method, body) {
   try {
     const opts = { method, headers: { 'Content-Type': 'application/json' } };
     if (body) opts.body = JSON.stringify(body);
-    const res = await fetch('/api/templates', opts);
+    const res = await fetch(url, opts);
     if (!res.ok) throw new Error(`API ${res.status}`);
     return await res.json();
   } catch (err) {
@@ -2421,7 +2421,7 @@ async function apiCall(method, body) {
 }
 
 async function loadTemplatesFromApi() {
-  const data = await apiCall('GET');
+  const data = await apiFetch('/api/templates', 'GET');
   if (data && data.templates) {
     templates = data.templates.map(t => ({
       id: t._id || t.id,
@@ -2441,7 +2441,7 @@ async function loadTemplatesFromApi() {
 
 async function saveTemplateToApi(tpl) {
   if (isOfflineMode) return;
-  await apiCall('POST', {
+  await apiFetch('/api/templates-save', 'POST', {
     id: tpl.id,
     name: tpl.name,
     spoken: tpl.spoken,
@@ -2453,7 +2453,7 @@ async function saveTemplateToApi(tpl) {
 
 async function deleteTemplateFromApi(id) {
   if (isOfflineMode) return;
-  await apiCall('DELETE', { id });
+  await apiFetch('/api/templates-delete', 'DELETE', { id });
 }
 
 async function checkAuth() {
