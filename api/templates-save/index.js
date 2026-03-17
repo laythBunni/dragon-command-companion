@@ -18,48 +18,34 @@ module.exports = async function (context, req) {
     const db = await getDb();
     const collection = db.collection('templates');
     const now = Date.now();
+    const docId = id || ('tpl_' + now + '_' + Math.random().toString(36).slice(2, 6));
 
-    if (id) {
-      // Update existing — only if it belongs to this user
-      const result = await collection.findOneAndUpdate(
-        { _id: id, userId: user.id },
-        { $set: { name, spoken, text, category: category || 'Uncategorised', status: status || 'draft', updated: now } },
-        { returnDocument: 'after' }
-      );
+    // Upsert — create if doesn't exist, update if it does
+    const result = await collection.findOneAndUpdate(
+      { _id: docId, userId: user.id },
+      {
+        $set: {
+          name,
+          spoken,
+          text,
+          category: category || 'Uncategorised',
+          status: status || 'draft',
+          updated: now
+        },
+        $setOnInsert: {
+          _id: docId,
+          userId: user.id,
+          created: now
+        }
+      },
+      { upsert: true, returnDocument: 'after' }
+    );
 
-      if (!result) {
-        context.res = { status: 404, body: { error: 'Template not found' } };
-        return;
-      }
-
-      context.res = {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: { template: result }
-      };
-    } else {
-      // Create new
-      const newId = 'tpl_' + now + '_' + Math.random().toString(36).slice(2, 6);
-      const template = {
-        _id: newId,
-        userId: user.id,
-        name,
-        spoken,
-        text,
-        category: category || 'Uncategorised',
-        status: status || 'draft',
-        created: now,
-        updated: now
-      };
-
-      await collection.insertOne(template);
-
-      context.res = {
-        status: 201,
-        headers: { 'Content-Type': 'application/json' },
-        body: { template }
-      };
-    }
+    context.res = {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: { template: result }
+    };
   } catch (err) {
     context.res = { status: 500, body: { error: err.message } };
   }
